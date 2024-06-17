@@ -1,28 +1,42 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract ErrorHandlerContract {
-    error InsufficientBalanceError(uint requiredAmount);
+contract  GradingSystem {
+    error InsufficientCreditsError(uint requiredCredits);
 
-    string public newToken = "Prajjwal";
-    uint256 public current_supply = 200;
-    mapping(address => uint256) public balances;
-   
-    function  customCheck(uint inputed_stock) public pure returns (string memory) {
-        uint balance_stock = 150;
-        require(inputed_stock <= balance_stock, "Error message:Stock not Available");
-        return "Product is avaiable ";
+    struct Student {
+        string student_name;
+        uint256 student_credits;
+        mapping(string => uint8) stduent_grades;
     }
 
- 
-    function  assertcheck (uint _quantity) public pure returns (string memory){
-        assert(_quantity> 0 && _quantity < 99); 
-        return "Error Message: Quantity must be between 0 and 99";
-}
+    mapping(address => Student) public students;
 
-    function custom_revert_condition(uint _balance, uint _amount) public pure {
-        if (_balance < _amount) {
-            revert("Custom error message: Something went wrong");
+    function addStudent(address _studentAddress, string memory _name) public {
+        students[_studentAddress].student_name = _name;
+    }
+
+    function assignGrade(address _studentAddress, string memory _course, uint8 _grade) public {
+        require(_grade >= 0 && _grade <= 100, "Error: Invalid grade. Must be between 0 and 100.");
+        students[_studentAddress].stduent_grades[_course] = _grade;
+    }
+
+    
+
+    function assertCredits(address _studentAddress) public view returns (string memory) {
+        uint256 credits = students[_studentAddress].student_credits;
+        assert(credits >= 0 && credits <= 120); 
+        return "Error: Credits must be between 0 and 120.";
+    }
+
+    function checkCredits(address _studentAddress, uint256 _requiredCredits) public view {
+        uint256 credits = students[_studentAddress].student_credits;
+        if (credits < _requiredCredits) {
+            revert InsufficientCreditsError(_requiredCredits);
         }
+    }
+
+    function addCredits(address _studentAddress, uint256 _credits) public {
+        students[_studentAddress].student_credits += _credits;
     }
 }
