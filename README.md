@@ -1,20 +1,26 @@
 # Project Title: ErrorHandlerContract
 # Description
-This program defines a simple error handling contract called ErrorHandlerContract with the following features:
+This program defines a simple grading system contract called GradingSystem with the following features:
 
-# Public Variables:
+#  Custom Error
+* InsufficientCreditsError(uint requiredCredits): A custom error to indicate insufficient credits.
+# Structs
+* Student: A struct that stores student information:
+* student_name: The name of the student.
+* student_credits: The number of credits the student has.
+* stduent_grades: A mapping to keep track of the student's grades for different courses.
+# Public Variables
+* students: A public mapping that associates Ethereum addresses with Student structs. This allows storing and retrieving student information using their address.
+# Functions
+* addStudent(address _studentAddress, string memory _name): Adds a new student by specifying their address and name.
+* assignGrade(address _studentAddress, string memory _course, uint8 _grade): Assigns a grade to a student for a specific course. Uses require to validate that the grade is between 0 and 100.
 
-* newToken: Stores the token's name.
-* current_supply: Stores the total supply of the token.
-* balances: A mapping to keep track of balances associated with addresses.
- # Functions:
+* assertCredits(address _studentAddress) public view returns (string memory): Checks that a student's credits are within a valid range (0 to 120). Uses assert to ensure this condition.
 
-* customCheck(uint inputed_stock): A function to check if the input stock is available. Uses require to validate the stock availability.
-* assertcheck(uint _quantity): A function to check if the quantity is within a specified range. Uses assert to ensure the quantity is between 0 and 99.
-* custom_revert_condition(uint _balance, uint _amount): A function to revert the transaction with a custom error message if the balance is less than the amount.
-# Custom Error:
+* checkCredits(address _studentAddress, uint256 _requiredCredits) public view: Checks if a student has the required number of credits. If not, it reverts with the custom error InsufficientCreditsError.
 
-* InsufficientBalanceError(uint requiredAmount): A custom error to indicate insufficient balance.
+* addCredits(address _studentAddress, uint256 _credits): Adds credits to a student's record.
+
 # Getting Started
 To run this program, you can use Remix, an online Solidity IDE:
 
